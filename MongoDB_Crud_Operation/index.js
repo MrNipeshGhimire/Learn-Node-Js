@@ -1,5 +1,6 @@
 const express = require("express");
-const {dbConnection } = require("./dbConnection")
+const {dbConnection } = require("./dbConnection");
+const { ObjectId } = require("mongodb");
 
 const app = express();
 app.use(express.json());
@@ -62,6 +63,29 @@ app.post("/insert",async(req,res)=>{    //async means asynchronous , it don't fi
         res.send(insertObj);
     }
 
+})
+
+app.delete("/delete/:id",async(req,res)=>{
+    const {id} = req.params;
+    console.log(id)
+
+    const db = await dbConnection();
+    const studentCollection = db.collection("student");
+
+    try{
+        deleteData = await studentCollection.deleteOne({_id:new ObjectId(id)})
+        const deleteObj = {
+            status:1,
+            msg: "Data deleted successfully",
+            deleteData
+        }
+        console.log(deleteObj)
+        res.send(deleteData)
+
+    }catch(err){
+        console.log(err);
+        res.send(err);
+    }
 })
 
 
