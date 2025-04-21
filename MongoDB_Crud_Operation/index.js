@@ -4,8 +4,32 @@ const {dbConnection } = require("./dbConnection")
 const app = express();
 app.use(express.json());
 
-app.get("/",(req,res)=>{
-    res.send("Index page")
+app.get("/",async(req,res)=>{
+
+    const db = await dbConnection();
+    const studentCollection = db.collection("student");
+
+    const fetchData = await studentCollection.find().toArray();
+
+    if(fetchData==null){
+        console.log("Students Records empty");
+    }else{
+        let fetchObj = {
+            status:1,
+            msg: "Data",
+            fetchData
+        }
+        console.log(fetchObj);
+        res.send(fetchObj)
+    }
+    
+
+    try{
+
+    }catch(err){
+        console.log(err)
+        res.send(err)
+    }
     
 })
 
