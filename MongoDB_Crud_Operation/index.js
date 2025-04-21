@@ -12,8 +12,12 @@ app.get("/",async(req,res)=>{
 
     const fetchData = await studentCollection.find().toArray();
 
-    if(fetchData==null){
-        console.log("Students Records empty");
+    if(fetchData.length ==0){
+        console.log("No student records found");
+        let obj ={
+            msg: "No Student records found"
+        }
+        res.send(obj)
     }else{
         let fetchObj = {
             status:1,
@@ -63,6 +67,34 @@ app.post("/insert",async(req,res)=>{    //async means asynchronous , it don't fi
         res.send(insertObj);
     }
 
+})
+
+//update api
+app.put("/update/:id",async(req,res)=>{
+
+    const db = await dbConnection();
+    const studentCollection = db.collection("student");
+    const {id} = req.params;
+
+    const objField ={}
+    const {name,email} = req.body;
+
+    if(name!=="" && name!==undefined && name!==null){
+        objField["name"] = name;
+    }
+
+    if(email!=="" && email!==undefined && email!==null){
+        objField["email"] = email;
+    }
+
+    updateData =await studentCollection.updateOne({_id:new ObjectId(id)},{$set:objField})
+        objData ={
+            status:1,
+            msg: "Data updated successfully",
+            updateData
+        }
+        console.log(objData)
+        res.send(objData)
 })
 
 app.delete("/delete/:id",async(req,res)=>{
