@@ -4,6 +4,7 @@ const { ObjectId } = require("mongodb")
 
 let app = express()
 
+
 app.use(express.json())
 
 app.get("/student-read",async(req,res)=>{

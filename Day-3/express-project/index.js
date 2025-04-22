@@ -4,6 +4,16 @@ let express = require("express")
 let app = express()
 app.use(express.json())
 
+//middleware 
+let checkToken = (req,res,next)=>{
+    console.log("Welcome")
+    next()
+}
+
+app.use(checkToken) // Middleware
+
+
+
 app.get("/",(req, res)=>{
     res.send({status:1,msg:"This is Home Page API"})
 })
